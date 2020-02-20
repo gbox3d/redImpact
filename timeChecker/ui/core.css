@@ -1,0 +1,31 @@
+div.container.main {
+    margin-top: 4px;
+    margin-bottom: 4px;
+    padding-bottom: 8px;
+    /* border: 1px solid black; */
+
+}
+
+div.container.main .header {
+    /* background-color: red; */
+    /* color: wheat; */
+    margin-bottom: 8px;
+}
+
+.hide {
+    display: none;
+}
+
+li[_type=looper] {
+    background-color: yellow;
+}
+li[_type=simple] {
+    background-color: orange;
+}
+li[_type=system] {
+    background-color: grey;
+}
+li[_type=high-low] {
+    background-color: greenyellow;
+}
+

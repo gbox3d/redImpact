@@ -1,0 +1,20 @@
+{
+  "name": "timechecker",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js 20320",
+    "db4mac": "cd /Users/gbox3d/Desktop/mongodb/app/bin/ && ./mongod --dbpath ../../data",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "gbox3d",
+  "license": "ISC",
+  "dependencies": {
+    "@std/esm": "^0.26.0",
+    "cron": "^1.8.2",
+    "moment": "^2.24.0",
+    "mongodb": "^3.5.2",
+    "node-fetch": "^2.6.0"
+  }
+}

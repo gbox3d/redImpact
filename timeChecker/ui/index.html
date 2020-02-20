@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>timeChecker Setup</title>
+
+    <link rel="stylesheet" href="./core.css">
+    <link rel="stylesheet" href="../../libs/bootstrap/css/bootstrap.min.css" crossorigin="anonymous">
+
+    <script src="../../libs/jquery-3.4.1.min.js"></script>
+    <script src="../../libs/popper.min.js"></script>
+    <script src="../../libs/bootstrap/js/bootstrap.min.js"></script>
+
+</head>
+
+<style>
+
+</style>
+
+<body>
+
+    <div class="container main">
+        <div class="header">
+            <div> - System Config - </div>
+            <div id="version"> </div>
+        </div>
+        <form id="basicSetup">
+
+            <!-- <div class="form-group">
+                <label for="rebootTime">reboot Time</label>
+                <input type="time" class="form-control" id="rebootTime">
+            </div> -->
+
+            <div class="form-group">
+                <label for="loopDelay"> 루프 지연시간 </label>
+                <input type="number" class="form-control" id="loopDelay">
+            </div>
+
+            <div class="form-group">
+                <label for="remoteIp"> control ip </label>
+                <input class="form-control" id="remoteIp">
+
+                <label for="restApiPort"> rest api port </label>
+                <input class="form-control" id="restApiPort">
+
+                <label for="remoteUdpPort"> udp port </label>
+                <input class="form-control" id="remoteUdpPort">
+
+            </div>
+
+            <button type="submit" class="btn btn-primary">Submit</button>
+            <!-- <div style="text-align: right;">
+                <button> save </button>
+                <button id="btn-reset" > reset </button>
+            </div> -->
+        </form>
+    </div>
+
+    <div class="container extra-ui">
+        <h1> 스케쥴관리 </h1>
+        <ul class="list-group" name="scheduleList"></ul>
+        <button type="button" class="btn btn-primary btn-block mt-2" id="AddSchedule"> Add Schedule </button>
+    </div>
+
+    <div id='modal-continer'></div>
+
+
+    <script type="module">
+
+        import { Digit2TimeString, TimeString2Digit } from '../../libs/util.mjs';
+        import { LogicUnitModal } from './LogicUnitModal.js'
+
+
+        globalThis.theApp = {}
+
+        //modal setup
+        theApp.LogicUnitModal = new LogicUnitModal({
+            container: document.querySelector('#modal-continer')
+        })
+
+
+        //설정 읽기 
+        const readConfig = () => new Promise((resolve, reject) => {
+            fetch(`http://${window.location.hostname}:20320/rest/getConfig`)
+                .then(_ => _.json())
+                .then(_ => {
+                    // console.log(_);
+                    resolve(_)
+                })
+                .catch(e => {
+                    reject(e)
+                });
+        });
+
+        const readSchedule = () => new Promise((resolve, reject) => {
+            fetch(`http://${window.location.hostname}:20320/rest/getSchedule`)
+                .then(_ => _.json())
+                .then(_ => resolve(_))
+        });
+
+        //설정 저장
+        const writeConfig = (_config) => new Promise((resolve, reject) => {
+
+            let _url = `http://${window.location.hostname}:20320/rest/setConfig?data=${JSON.stringify(_config)}`
+            console.log(_url)
+
+            fetch(_url)
+                .then(_ => _.json())
+                .then(_ => {
+                    console.log(_);
+                    resolve()
+                })
+                .catch(e => {
+                    reject(e)
+                })
+        });
+
+        const addSchedule = (_item) => new Promise((resolve, reject) => {
+
+            let _url = `http://${window.location.hostname}:20320/rest/addSchedule?data=${JSON.stringify(_item)}`
+            console.log(_url)
+
+            fetch(_url)
+                .then(_ => _.json())
+                .then(_ => {
+                    // console.log(_);
+                    resolve(_)
+                })
+                .catch(e => {
+                    reject(e)
+                });
+        });
+
+        const removeSchedule = (_id) => new Promise((resolve, reject) => {
+            let _url = `http://${window.location.hostname}:20320/rest/removeSchedule?itemId=${_id}`
+            console.log(_url)
+
+            fetch(_url)
+                .then(_ => _.json())
+                .then(_ => {
+                    resolve(_)
+                })
+                .catch(e => {
+                    reject(e)
+                });
+
+        });
+        const updateSchedule = (_id, _schedule) => new Promise((resolve, reject) => {
+            let _url = `http://${window.location.hostname}:20320/rest/updateSchedule?itemId=${_id}&schedule=${JSON.stringify(_schedule)}`
+            console.log(_url)
+
+            fetch(_url)
+                .then(_ => _.json())
+                .then(_ => {
+                    resolve(_)
+                })
+                .catch(e => {
+                    reject(e)
+                });
+
+        });
+
+        const getSystemInfo = (_item) => new Promise((resolve, reject) => {
+            let _url = `http://${window.location.hostname}:20320/rest/sysinfo`
+            console.log(_url)
+
+            fetch(_url)
+                .then(_ => _.json())
+                .then(_ => {
+                    resolve(_)
+                })
+                .catch(e => {
+                    reject(e)
+                });
+
+        });
+
+        function UI_addScduleList(_listGroup, _item) {
+
+            
+            let _li = document.createElement("li");
+            _li.classList.add('list-group-item')
+            _li.classList.add('mb-2');
+            _li.setAttribute("_id", _item._id)
+            _li.setAttribute("_type", _item.type);
+
+            switch (_item.type) {
+                case 'simple':
+                    {
+                        _li.innerHTML = ` 
+                    <form>
+                        <div class="form-row">
+                            <div class="form-group col-md-4">
+                                <label for="inputCity">Name</label>
+                                <input class="form-control" value='${_item.name}' name="lu_name"> 
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label>Trigger Time</label>
+                                <input type="time" class="form-control" value='${ Digit2TimeString(_item.timeTrigger)}' name="timeTrigger"> 
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label>Command </label>
+                                <input class="form-control" value='${_item.command}' name="command"> 
+                            </div>
+                        </div>
+                        <div class="form-row" data-item_id=${_item._id} data-item_type=${_item.type} >
+                            <div class="form-group col-md-3">
+                            <button name="update" type="button" class="btn btn-primary" > update </button>
+                            </div>
+                            <div class="form-group col-md-3">
+                            <button name="del" type="button" class="btn btn-primary" > del </button>
+                            </div>
+                        </div>
+                    <form>
+                    `;
+                    }
+
+                    break;
+                case 'looper':
+                    {
+                        _li.innerHTML = ` 
+                    <form class=" ${_item.type}">
+                        <div class="form-row">
+                            <div class="form-group col-md-4">
+                                <label for="inputCity">Name</label>
+                                <input class="form-control" value='${_item.name}' name="lu_name"> 
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label> loop delay </label>
+                                <input  class="form-control" value='${_item.loopDelay}' name="loopDelay"> 
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label>Command </label>
+                                <input class="form-control" value='${_item.command}' name="command"> 
+                            </div>
+                        </div>
+                        <div class="form-row" data-item_id=${_item._id} data-item_type=${_item.type} >
+                            <div class="form-group col-md-3">
+                            <button name="update" type="button" class="btn btn-primary" > update </button>
+                            </div>
+                            <div class="form-group col-md-3">
+                            <button name="del" type="button" class="btn btn-primary" > del </button>
+                            </div>
+                        </div>
+                    <form>
+                    `;
+                    }
+                    break;
+                case 'high-low':
+                    {
+
+                        _li.innerHTML = ` 
+                    <form class=" ${_item.type}" >
+                        <div class="form-row">
+                            <div class="form-group col-md-4">
+                                <label for="inputCity">Name</label>
+                                <input class="form-control" value="${_item.name}" name="lu_name"> 
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label for="inputCity">On Time</label>
+                                <input type="time" class="form-control" value="${ Digit2TimeString(_item.on_time)}" name="on_time"> 
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label for="inputCity">Off Time</label>
+                                <input type="time" class="form-control" value="${ Digit2TimeString(_item.off_time)}" name="off_time"> 
+                            </div>
+
+                            <div class="form-group col-md-4">
+                                <label >On cmd</label>
+                                <input  class="form-control" value='${_item.on_command}' name="on_command"> 
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label >Off cmd</label>
+                                <input  class="form-control" value='${_item.off_command}' name="off_command"> 
+                            </div>
+                            
+                        </div>
+                        <div class="form-row" data-item_id=${_item._id} data-item_type=${_item.type} >
+                            <div class="form-group col-md-3">
+                            <button name="update" type="button" class="btn btn-primary" > update </button>
+                            </div>
+                            <div class="form-group col-md-3">
+                            <button name="del" type="button" class="btn btn-primary" > del </button>
+                            </div>
+                        </div>
+                    <form>
+                    `;
+                    }
+                    break;
+                default:
+                    {
+                        _li.innerHTML = ` 
+                        <form>
+                            <div class="form-group col-md-4">
+                                <label for="inputCity">Name</label>
+                                <input class="form-control" value="${_item.name}" name="lu_name"> 
+                            </div>
+                            <div>${_item.type}  is unknown</div>
+
+                        <div class="form-row" data-item_id=${_item._id} data-item_type=${_item.type} >
+                            <div class="form-group col-md-3">
+                            <button name="update" type="button" class="btn btn-primary" > update </button>
+                            </div>
+                            <div class="form-group col-md-3">
+                            <button name="del" type="button" class="btn btn-primary" > del </button>
+                            </div>
+                        </div>
+                        </form>
+                        `
+
+                    }
+                    break;
+
+            }
+
+            _listGroup.appendChild(_li);
+        }
+
+        //start up read data
+        readConfig()
+            .then(_ => {
+                console.log('read config ok')
+                console.log(_)
+                let _form = document.getElementById("basicSetup")
+                // _form.rebootTime.value = Digit2TimeString(_.config.reboot);
+                _form.loopDelay.value = _.config.loopDelay
+                _form.remoteIp.value = _.config.remote.ip
+                _form.remoteUdpPort.value = _.config.remote.udp_port
+                _form.restApiPort.value = _.config.remote.port
+
+                //스캐쥴 일기 
+                return readSchedule()
+            })
+            .then(_ => {
+                console.log('get schedule ok')
+                console.log(_)
+
+
+                let _listGroup = document.querySelector("[name=scheduleList]")
+                _.schedules.forEach(_item => UI_addScduleList(_listGroup, _item));
+
+                //시스템 정보 얻기 
+                return getSystemInfo();
+            })
+            .then(_ => {
+                let _elm = document.getElementById('version')
+
+                _elm.innerText = `server connect ok!  version : ${_.version.major}.${_.version.miner}.${_.version.rev}`
+
+                console.log(_)
+
+
+                //UI Code
+                //기본설정 업데이트 
+                document.getElementById("basicSetup").addEventListener("submit", evt => {
+                    evt.preventDefault();
+
+                    let _form = evt.target
+
+                    let _config = {
+                        // reboot: TimeString2Digit(_form.rebootTime.value),
+                        loopDelay: _form.loopDelay.value,
+                        remote: {
+                            ip: _form.remoteIp.value,
+                            udp_port: _form.remoteUdpPort.value,
+                            port: _form.restApiPort.value
+                        }
+                    }
+
+                    writeConfig(_config)
+                        .then(_ => {
+                            console.log('write ok');
+                            alert('send ok')
+                        })
+                        .catch(_ => {
+                            console.log(_)
+                            alert(_)
+                        })
+                    //console.log(evt.target.rebootTime.value);
+                });
+
+                //스케쥴 추가 
+                document.querySelector("#AddSchedule[type=button]").addEventListener('click', evt => {
+                    theApp.LogicUnitModal.doModal()
+                        .then(_ => {
+                            console.log(_)
+                            if (_) {
+                                return addSchedule(_)
+                            }
+                            else {
+                                return new Promise((resolve, reject) => reject({ message: 'cancel' }));
+                            }
+                        })
+                        .then(_ => {
+                            alert(_.result)
+                            location.reload()
+                        })
+                        .catch(e => {
+                            console.log(e)
+                            alert(e.message)
+                        })
+                });
+
+                //스케쥴 항목별처리 
+                document.querySelector("[name=scheduleList]").addEventListener("click", evt => {
+                    evt.preventDefault()
+                    console.log(evt.target)
+
+                    let _parentNode = evt.target.parentNode.parentNode
+
+                    //버튼 처리 
+                    if (evt.target.name === "del") {
+                        // console.log(_parentNode.dataset.item_id)
+                        removeSchedule(_parentNode.dataset.item_id)
+                            .then(_ => {
+                                console.log(_)
+                                alert(_.result)
+
+                                //reload page
+                                location.reload()
+
+                                //remove from parent
+                                // _parentNode.parentNode.parentNode.removeChild(_parentNode.parentNode);
+
+
+                            })
+                            .catch(e => {
+                                console.log(e)
+                            });
+                    }
+                    else if (evt.target.name === "update") {
+
+                        // console.log(_parentNode.parentNode.portNumber.value)
+
+                        let _item;
+                        switch (_parentNode.dataset.item_type) {
+                            case 'simple':
+                                _item = {
+                                    name: _parentNode.parentNode.lu_name.value,
+                                    timeTrigger: TimeString2Digit(_parentNode.parentNode.timeTrigger.value),
+                                    command: _parentNode.parentNode.command.value
+                                }
+                                break;
+                            case 'high-low':
+                                _item = {
+                                    name: _parentNode.parentNode.lu_name.value,
+                                    on_time: TimeString2Digit(_parentNode.parentNode.on_time.value),
+                                    off_time: TimeString2Digit(_parentNode.parentNode.off_time.value),
+                                    on_command: _parentNode.parentNode.on_command.value,
+                                    off_command: _parentNode.parentNode.off_command.value
+                                }
+                                break;
+                            case 'looper':
+                                {
+                                    _item = {
+                                        name : _parentNode.parentNode.lu_name.value,
+                                        loopDelay : _parentNode.parentNode.loopDelay.value,
+                                        command : _parentNode.parentNode.command.value
+                                    }
+                                }
+                                break;
+                            default:
+                                {
+                                    _item = {
+                                        name : _parentNode.parentNode.lu_name.value
+                                    }
+
+                                }
+                                break;
+                        }
+                        console.log(_item);
+
+                        updateSchedule(_parentNode.dataset.item_id, _item)
+                            .then(_ => {
+                                console.log(_)
+                                alert(_.result)
+                                //reload page
+                                location.reload()
+                            })
+                            .catch(e => {
+                                console.log(e)
+                            });
+                    }
+
+                });
+            })
+            .catch(e => {
+                let _elm = document.getElementById('version')
+                _elm.innerText = `server failed!  ${e}`
+                console.log(e)
+            });
+    </script>
+
+
+</body>
+
+</html>

@@ -1,0 +1,8 @@
+{
+    "apps": [{
+      "name": "redwine",
+      "script": "index.js",
+      "args" : "20310",
+      "watch" : true
+    }]
+  }
