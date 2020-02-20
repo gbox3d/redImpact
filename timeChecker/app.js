@@ -42,54 +42,6 @@ udp_socket.on('message', (_) => {
     console.log(_)
 })
 
-
-
-// function ApplyPort(_port) {
-//     let _current = parseInt(moment().format('HHmm'));
-//     let _on = parseInt(_port.on_time);
-//     let _off = parseInt(_port.off_time);
-
-//     let _pkt = {
-//         c: 'dw',
-//         p: _port.portNumber,
-//         v: 0
-//     }
-
-//     if (_off > _on) {
-//         //on 상태
-//         if (_on <= _current && _off >= _current) {
-//             _pkt.v = _port.activeVal ? 1 : 0;
-//         }
-//         else { //off
-//             _pkt.v = _port.activeVal ? 0 : 1;
-//         }
-//     }
-//     else {
-//         //on 상태
-//         if (_on <= _current || _off >= _current) {
-//             _pkt.v = _port.activeVal ? 1 : 0;
-//         }
-//         else { //off
-//             _pkt.v = _port.activeVal ? 0 : 1;
-//         }
-
-//     }
-
-//     let _config = theApp.config;
-//     // console.log(_config.remote.ip)
-//     let _url = `http://${_config.remote.ip}:${_config.remote.port}/rest/onoff?pin=${_pkt.p}&value=${_pkt.v}`;
-//     console.log('api call :', _url)
-//     fetch(_url)
-//         .then(_ => _.json())
-//         .then(_ => {
-//             console.log(_)
-//         })
-//         .catch(e => {
-//             console.log(e)
-//         })
-
-// }
-
 //high low 로직 처리 
 function ApplyHighLowLogic(_logicUnit) {
     let _config = theApp.config;
@@ -132,7 +84,6 @@ function ApplyHighLowLogic(_logicUnit) {
             console.log(e)
         });
 }
-
 
 function startLoop(_) {
 
