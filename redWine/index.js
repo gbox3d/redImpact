@@ -142,8 +142,7 @@ function process_get(req, res) {
                 let _tms = moment(_date + 'T' + _time)
 
                 let _cmd = `date -s '${_tms.format("YYYY-MM-DD HH:mm:ss")}'`;
-                console.log(_cmd)
-
+                console.log('set Date : ',_cmd)
                 //date -s '2019-01-25 12:34:56'
                 if (os.platform() === 'linux') {
 
@@ -154,9 +153,6 @@ function process_get(req, res) {
                             stdout: stdout,
                             stderr: stderr
                         }
-
-                        // console.log(result)
-
                         res.end(JSON.stringify(result));
 
                     })
