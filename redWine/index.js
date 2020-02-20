@@ -104,7 +104,9 @@ function process_get(req, res) {
 
                 let _url = _urlObj;
 
-                console.log('try cmd : ',_url.query.cmd)
+                // console.log('try cmd : ',_url.query.cmd)
+                console.log(`try cmd : ${_url.query.cmd} , at : ${new Date()}`)
+                
                 childExec(_url.query.cmd, (err, stdout, stderr) => {
 
                     let result = {
