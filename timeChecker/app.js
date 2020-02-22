@@ -13,9 +13,11 @@ const MongoClient = MongoDB.MongoClient;
 const dgram = require("dgram");
 const udp_socket = dgram.createSocket("udp4");
 
-const esm_require = require("@std/esm")(module);
+const esm_require = require("esm")(module);
 
-const { randWithRangeInteger } = esm_require('../libs/util.mjs')
+const { randWithRangeInteger } = esm_require('../libs/util.js')
+
+console.log( "test",randWithRangeInteger(1,5))
 
 let theApp = {
     version: {

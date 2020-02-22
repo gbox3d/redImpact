@@ -1,4 +1,4 @@
-import { Digit2TimeString, TimeString2Digit } from '../../libs/util.mjs';
+import { Digit2TimeString, TimeString2Digit } from '../../libs/util.js';
 
 const _muString = `
 <!-- 스캐쥴 인웃 모달 박스 -->
