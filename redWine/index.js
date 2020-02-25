@@ -10,23 +10,20 @@ const moment = require('moment');
 const onoffnet = require('./onoffnet');
 
 let theApp = {
-    version: '1.0.0',
+    version: {
+        major: 1,
+        miner: 0,
+        rev: 2
+    },
     port: 20310,
-    onoffnetApp: new onoffnet(
-        {
-            host: {
-                port: 20020
-            }
-        }
-    )
+    udp_port : 20020
 };
 
+// console.log(process.argv.length)
+// console.log(process.argv)
 
-console.log(process.argv.length)
-console.log(process.argv)
 if(process.argv.length >=3 ) {
     theApp.port = parseInt(process.argv[2])
-
 }
 
 theApp.http_server = http.createServer(
@@ -42,8 +39,19 @@ theApp.http_server = http.createServer(
     }
 );
 
+//start rest server
 theApp.http_server.listen(theApp.port);
-console.log(`start Red Wine version ${theApp.version} , port ${theApp.port}`);
+console.log(`start Red Wine version ${theApp.version.major}.${theApp.version.miner}.${theApp.version.rev} , port ${theApp.port}`);
+
+//start onoff server
+theApp.onoffnetApp = new onoffnet(
+    {
+        host: {
+            port: theApp.udp_port
+        }
+    }
+);
+
 
 //get 처리 해주기
 function process_get(req, res) {
@@ -131,15 +139,16 @@ function process_get(req, res) {
                 }
 
                 let _date = _url.query.d;
-
                 let _time = _url.query.t;
-
                 // _date = spliceSplit(_date,4,1,'-')
-                console.log(_date)
+                console.log(_date,_time)
+                // console.log(_time.length)
+                // if(_time.length < 6) {
+                //     _time = "0" + _time
+                // }
 
-                //let timeStr = ''
-
-                let _tms = moment(_date + 'T' + _time)
+                let _tms = moment(_date + ':' + _time,"YYYYMMDD:hmmss")
+                console.log(_tms)
 
                 let _cmd = `date -s '${_tms.format("YYYY-MM-DD HH:mm:ss")}'`;
                 console.log('set Date : ',_cmd)
