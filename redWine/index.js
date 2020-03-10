@@ -54,7 +54,7 @@ theApp.onoffnetApp = new onoffnet(
 
 
 //get 처리 해주기
-function process_get(req, res) {
+async function process_get(req, res) {
 
     let _urlObj = UrlParser.parse(req.url, true);
 
@@ -150,7 +150,7 @@ function process_get(req, res) {
                 let _tms = moment(_date + ':' + _time,"YYYYMMDD:hmmss")
                 console.log(_tms)
 
-                let _cmd = `date -s '${_tms.format("YYYY-MM-DD HH:mm:ss")}'`;
+                let _cmd = `sudo date -s '${_tms.format("YYYY-MM-DD HH:mm:ss")}'`;
                 console.log('set Date : ',_cmd)
                 //date -s '2019-01-25 12:34:56'
                 if (os.platform() === 'linux') {
