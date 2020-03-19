@@ -209,7 +209,7 @@ async function process_get(req, res) {
                     value: _url.query.value
                 }
 
-                // console.log(_args)
+                console.log(_args)
 
                 theApp.onoffnetApp.writeGpio({
                     port: parseInt(_args.pin),

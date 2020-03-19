@@ -60,12 +60,12 @@ function onoffNet({bindCallback,host}) {
 
   // onOffPins[5] = new Gpio(1, 'out');
   // onOffPins[6] = new Gpio(1, 'out');
-  onOffPins[12] = new Gpio(1, 'out');
-  onOffPins[13] = new Gpio(1, 'out');
-  onOffPins[16] = new Gpio(1, 'out');
-  onOffPins[19] = new Gpio(1, 'out');
-  onOffPins[20] = new Gpio(1, 'out');
-  onOffPins[21] = new Gpio(1, 'out');
+  onOffPins[12] = new Gpio(12, 'out');
+  onOffPins[13] = new Gpio(13, 'out');
+  onOffPins[16] = new Gpio(16, 'out');
+  onOffPins[19] = new Gpio(19, 'out');
+  onOffPins[20] = new Gpio(20, 'out');
+  onOffPins[21] = new Gpio(21, 'out');
 
   this.onOffPins = onOffPins;
 
