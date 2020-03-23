@@ -224,7 +224,7 @@ async function process_get(req, res) {
             res.writeHead(200, header);
             res.end(JSON.stringify({
                 result: 'ok',
-                msg: 'it is red wine server ' + theApp.version
+                msg: `it is red wine server ${theApp.version.major}.${theApp.version.miner}.${theApp.version.rev}`
             }));
             break;
     }
