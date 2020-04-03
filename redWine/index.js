@@ -13,7 +13,7 @@ let theApp = {
     version: {
         major: 1,
         miner: 0,
-        rev: 2
+        rev: 3
     },
     port: 20310,
     udp_port : 20020
@@ -41,7 +41,7 @@ theApp.http_server = http.createServer(
 
 //start rest server
 theApp.http_server.listen(theApp.port);
-console.log(`start Red Wine version ${theApp.version.major}.${theApp.version.miner}.${theApp.version.rev} , port ${theApp.port}`);
+console.log(`start Red Wine version ${theApp.version.major}.${theApp.version.miner}.${theApp.version.rev} , port ${theApp.port} ${new Date()}`);
 
 //start onoff server
 theApp.onoffnetApp = new onoffnet(
@@ -113,7 +113,7 @@ async function process_get(req, res) {
                 let _url = _urlObj;
 
                 // console.log('try cmd : ',_url.query.cmd)
-                console.log(`try cmd : ${_url.query.cmd} , at : ${new Date()}`)
+                console.log(`cmd : ${_url.query.cmd} , at : ${new Date()}`)
                 
                 childExec(_url.query.cmd, (err, stdout, stderr) => {
 
