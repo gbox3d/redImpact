@@ -10,6 +10,7 @@ const moment = require('moment');
 const onoffnet = require('./onoffnet');
 
 let theApp = {
+    name : "redWine",
     version: {
         major: 1,
         miner: 0,
@@ -92,12 +93,15 @@ async function process_get(req, res) {
                 // let _url = urlParser.parse(req.url,true);
 
                 let result = {
-                    version: theApp.version,
+                    app : {
+                        name : theApp.name,
+                        version : theApp.version
+                    },
+                    node: process.versions,
                     os: {
                         platform: os.platform(),
                         version: os.release()
-                    },
-
+                    }
                 }
 
                 console.log(result)
