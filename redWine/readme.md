@@ -35,9 +35,9 @@ http://localhost:2310/rest/exec?cmd=amixer cset numid=1 100%
 #싸운드 테스트 
 http://localhost:2310/rest/exec?cmd=speaker-test -t sine -f 440 -c 2 -s 1
 #gpu 온도얻기 
-http://localhost:2310/rest/exec?cmd=/opt/vc/bin/vcgencmd measure_temp
+http://localhost:20310/rest/exec?cmd=/opt/vc/bin/vcgencmd measure_temp
 #cpu 온도얻기
-http://localhost:2310/rest/exec?cmd=cat /sys/class/thermal/thermal_zone0/temp
+http://localhost:20310/rest/exec?cmd=cat /sys/class/thermal/thermal_zone0/temp
 ``` 
 
 #### 2. scanAp
