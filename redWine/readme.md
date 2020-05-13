@@ -28,8 +28,8 @@ http://localhost:3010/rest/sysinfo
 ex)
 
 ```
-http://localhost:2310/rest/exec?cmd=pwd  
-http://localhost:2310/rest/exec?cmd=ls -al  
+http://localhost:20310/rest/exec?cmd=pwd  
+http://localhost:20310/rest/exec?cmd=ls -al  
 #볼륨조절
 http://localhost:2310/rest/exec?cmd=amixer cset numid=1 100% 
 #싸운드 테스트 
