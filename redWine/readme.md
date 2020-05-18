@@ -28,16 +28,16 @@ http://localhost:3010/rest/sysinfo
 ex)
 
 ```
-http://localhost:2310/rest/exec?cmd=pwd  
-http://localhost:2310/rest/exec?cmd=ls -al  
+http://localhost:20310/rest/exec?cmd=pwd  
+http://localhost:20310/rest/exec?cmd=ls -al  
 #볼륨조절
 http://localhost:2310/rest/exec?cmd=amixer cset numid=1 100% 
 #싸운드 테스트 
 http://localhost:2310/rest/exec?cmd=speaker-test -t sine -f 440 -c 2 -s 1
 #gpu 온도얻기 
-http://localhost:2310/rest/exec?cmd=/opt/vc/bin/vcgencmd measure_temp
+http://localhost:20310/rest/exec?cmd=/opt/vc/bin/vcgencmd measure_temp
 #cpu 온도얻기
-http://localhost:2310/rest/exec?cmd=cat /sys/class/thermal/thermal_zone0/temp
+http://localhost:20310/rest/exec?cmd=cat /sys/class/thermal/thermal_zone0/temp
 ``` 
 
 #### 2. scanAp
@@ -49,7 +49,7 @@ http://localhost:3010/scanAp?interface=wlan0
 ```
 
 #### 3. setDate
-시스템 시간 변경 함수, 인터넷이 비활성 상태에서만 가능  
+시스템 시간 변경 함수, 내부 행망같은 인터넷 시각 서버에 접근할수없을때 가능  
 /setDate?d=20190830&t=131003
 
 시간 세팅 관련 참고자료  

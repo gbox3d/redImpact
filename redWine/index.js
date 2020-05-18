@@ -10,10 +10,11 @@ const moment = require('moment');
 const onoffnet = require('./onoffnet');
 
 let theApp = {
+    name : "redWine",
     version: {
         major: 1,
         miner: 0,
-        rev: 2
+        rev: 3
     },
     port: 20310,
     udp_port : 20020
@@ -41,7 +42,7 @@ theApp.http_server = http.createServer(
 
 //start rest server
 theApp.http_server.listen(theApp.port);
-console.log(`start Red Wine version ${theApp.version.major}.${theApp.version.miner}.${theApp.version.rev} , port ${theApp.port}`);
+console.log(`start Red Wine version ${theApp.version.major}.${theApp.version.miner}.${theApp.version.rev} , port ${theApp.port} ${new Date()}`);
 
 //start onoff server
 theApp.onoffnetApp = new onoffnet(
@@ -92,12 +93,15 @@ async function process_get(req, res) {
                 // let _url = urlParser.parse(req.url,true);
 
                 let result = {
-                    version: theApp.version,
+                    app : {
+                        name : theApp.name,
+                        version : theApp.version
+                    },
+                    node: process.versions,
                     os: {
                         platform: os.platform(),
                         version: os.release()
-                    },
-
+                    }
                 }
 
                 console.log(result)
@@ -113,7 +117,7 @@ async function process_get(req, res) {
                 let _url = _urlObj;
 
                 // console.log('try cmd : ',_url.query.cmd)
-                console.log(`try cmd : ${_url.query.cmd} , at : ${new Date()}`)
+                console.log(`cmd : ${_url.query.cmd} , at : ${new Date()}`)
                 
                 childExec(_url.query.cmd, (err, stdout, stderr) => {
 
@@ -224,7 +228,7 @@ async function process_get(req, res) {
             res.writeHead(200, header);
             res.end(JSON.stringify({
                 result: 'ok',
-                msg: 'it is red wine server ' + theApp.version
+                msg: `it is red wine server ${theApp.version.major}.${theApp.version.miner}.${theApp.version.rev}`
             }));
             break;
     }
