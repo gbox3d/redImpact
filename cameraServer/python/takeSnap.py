@@ -1,7 +1,10 @@
+import sys
+import time
+from datetime import datetime
 from time import sleep
+
 from picamera import PiCamera
 
-import sys
 print(sys.version)
 print(sys.argv)
 print(len(sys.argv))
@@ -25,5 +28,8 @@ camera.start_preview()
 # Camera warm-up time
 sleep(2)
 print("capturing....")
-camera.capture('../../../../Public/foo.jpg')
-print('save ok')
+
+filename = f'../../../../Public/capture_{int(time.mktime(datetime.now().timetuple()))}.jpg'
+camera.capture(filename)
+
+print('save ok ',filename)
