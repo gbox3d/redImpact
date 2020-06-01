@@ -17,7 +17,7 @@ let theApp = {
         rev: 3
     },
     port: 20310,
-    udp_port : 20020
+    udp_port : 20311
 };
 
 // console.log(process.argv.length)
