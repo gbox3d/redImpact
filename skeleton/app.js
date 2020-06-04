@@ -7,21 +7,19 @@ let theApp = {
         rev: 1
     },
     name : "skeleton",
-    setup: function () {
+    setup: function ({
+        restPort
+    }) {
         return new Promise((resolve, reject) => {
-
-
-            if (process.argv.length >= 3) {
-                this.rest_port = parseInt(process.argv[2]);
-                resolve(this)
-            }
-            else {
+            if(restPort === undefined) 
+            {
                 console.log('usage : node index.js <rest-port>')
-                //this.exit(0)
                 reject({message : "check argument"})
             }
-
-            
+            else {
+                this.restPort = restPort
+                resolve(this)
+            }
 
         })
     }

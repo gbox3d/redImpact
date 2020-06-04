@@ -1,10 +1,28 @@
+// const dgram = require("dgram");
+// const server = dgram.createSocket("udp4");
+const yargs = require('yargs').argv;
 const http = require('http');
 const os = require('os');
 const UrlParser = require('url');
 
 const theApp = require('./app')
 
-theApp.setup()
+// let localPort = yargs.port
+// let restPort = yargs.restport
+// let beastId = yargs.beastId
+// let remoteIp = yargs.remoteIp
+// let remotePort = yargs.remotePort
+
+// console.log(yargs)
+
+theApp.setup({
+    localPort : yargs.port,
+    restPort : yargs.restPort,
+    remoteIp : yargs.remoteIp,
+    remotePort : yargs.remotePort,
+    localPort : yargs.port,
+    beastId : yargs.beastId
+})
     .then((_) => {
 
         let http_server = http.createServer(
@@ -20,11 +38,11 @@ theApp.setup()
             }
         );
 
-        http_server.listen(this.rest_port);
-        console.log(`start ${_.name} version ${_.version.major}.${_.version.minor}.${_.version.rev} , port ${_.rest_port}`);
+        http_server.listen(_.restPort);
+        console.log(`start ${_.name} version ${_.version.major}.${_.version.minor}.${_.version.rev} , port ${_.restPort}`);
 
         //get 처리 해주기
-        function process_get(req, res) {
+        async function process_get(req, res) {
 
             let _urlObj = UrlParser.parse(req.url, true);
             let header = {
@@ -76,7 +94,7 @@ theApp.setup()
             }
         }
 
-        function process_post(req, res) {
+        async function process_post(req, res) {
 
             var result = UrlParser.parse(req.url, true);
 
