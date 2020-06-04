@@ -1,5 +1,0 @@
-### get info
-GET http://localhost:20310/rest/sysinfo
-
-### exec
-GET http://localhost:20310/rest/exec?cmd=pwd  
