@@ -40,14 +40,18 @@
             <button type="submit" class="btn btn-primary btn-lg btn-block" name="save">Save Config</button>
 
         </form>
-    
+
     </div>
 
     <div class="container m-2 p-3 border">
-        <div>
-            <button type="button" class="btn btn-primary" name="test1"> test 1</button>
+        <div id="control-form" >
+            <div class="form-group">
+                <label>port url</label>
+                <input type="text" class="form-control" name="port">
+            </div>
+            <button type="button" class="btn btn-primary" name="on"> gpio on</button>
+            <button type="button" class="btn btn-primary" name="off"> gpio off</button>
         </div>
-
     </div>
 
 
@@ -59,22 +63,26 @@
             base_port: 20310
         }
 
-        theApp.base_url = localStorage.getItem("base_url")!==null ? localStorage.getItem("base_url") : location.hostname
-        theApp.base_port = localStorage.getItem("base_port")!==null ? localStorage.getItem("base_port") : 20310
-
+        theApp.base_url = localStorage.getItem("base_url") !== null ? localStorage.getItem("base_url") : location.hostname
+        theApp.base_port = localStorage.getItem("base_port") !== null ? localStorage.getItem("base_port") : 20310
         // if(localStorage.getItem("base_url") !== null) {
-            
         // }
-        
-
         let _form = document.querySelector('#setting')
         _form.base_url.value = theApp.base_url
         _form.base_port.value = theApp.base_port
 
-        document.querySelector("button[name=test1]").addEventListener('click', (evt) => {
+        document.querySelector("#control-form button[name=on]").addEventListener('click', async (evt) => {
 
-            // await fetch('')
+            let _port = document.querySelector('#control-form [name=port]').value
 
+            let _res = await (await fetch(`http://${theApp.base_url}:${theApp.base_port}/rest/onoff?pin=${_port}&value=1`)).json()
+            console.log(_res)
+        })
+        document.querySelector("#control-form button[name=off]").addEventListener('click', async (evt) => {
+
+            let _port = document.querySelector('#control-form [name=port]').value
+            let _res = await (await fetch(`http://${theApp.base_url}:${theApp.base_port}/rest/onoff?pin=${_port}&value=0`)).json()
+            console.log(_res)
         })
 
 
