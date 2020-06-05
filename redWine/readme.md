@@ -45,7 +45,7 @@ http://localhost:20310/rest/exec?cmd=cat /sys/class/thermal/thermal_zone0/temp
 /scanAp?interface=네트웍디바이스이름  
 
 ```
-http://localhost:3010/scanAp?interface=wlan0
+http://localhost:20310/scanAp?interface=wlan0
 ```
 
 #### 3. setDate
@@ -57,13 +57,13 @@ https://raspberrypi.stackexchange.com/questions/76182/set-manually-datetime-rasp
 
 ### 4. onoff rest-api gpio
 ```
-http://localhost:3010/rest/onoff?pin=18&value=1  
+http://localhost:20310/rest/onoff?pin=18&value=1  
 ```
 
 
 ### udp 를 통한 gpio 제어 
 
-udp port  : 10020    
+udp port  : 20311    
 
 #### 1. 패킷 기본 형식
 

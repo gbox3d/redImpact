@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="utf-8" />
+
+    <!-- 모바일용웹 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <!-- 안드로이드 홈화면추가시 상단 주소창 제거 -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <link rel="icon" sizes="128x128" href="./img/fav.png">
+    <!-- ios홈화면추가시 상단 주소창 제거 -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <link rel="apple-touch-icon" href="./img/fav.png">
+
+    <title> Red Wine </title>
+
+    <link rel="stylesheet" href="./libs/bootstrap/css/bootstrap.min.css">
+
+    <script src="./libs/jquery-3.4.1.min.js"></script>
+    <script src="./libs/popper.min.js"></script>
+    <script src="./libs/bootstrap/js/bootstrap.min.js"></script>
+
+
+</head>
+
+<body>
+
+    <div class="container m-2 p-3 border">
+        <form id=setting>
+            <div class="form-group">
+                <label>base url</label>
+                <input type="text" class="form-control" name="base_url">
+            </div>
+            <div class="form-group">
+                <label>base port</label>
+                <input type="text" class="form-control" name="base_port">
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-lg btn-block" name="save">Save Config</button>
+
+        </form>
+    
+    </div>
+
+    <div class="container m-2 p-3 border">
+        <div>
+            <button type="button" class="btn btn-primary" name="test1"> test 1</button>
+        </div>
+
+    </div>
+
+
+
+    <script>
+
+        var theApp = {
+            base_url: location.hostname,
+            base_port: 20310
+        }
+
+        theApp.base_url = localStorage.getItem("base_url")!==null ? localStorage.getItem("base_url") : location.hostname
+        theApp.base_port = localStorage.getItem("base_port")!==null ? localStorage.getItem("base_port") : 20310
+
+        // if(localStorage.getItem("base_url") !== null) {
+            
+        // }
+        
+
+        let _form = document.querySelector('#setting')
+        _form.base_url.value = theApp.base_url
+        _form.base_port.value = theApp.base_port
+
+        document.querySelector("button[name=test1]").addEventListener('click', (evt) => {
+
+            // await fetch('')
+
+        })
+
+
+    </script>
+
+
+
+
+</body>
+
+</html>
