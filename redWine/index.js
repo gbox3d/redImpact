@@ -223,6 +223,25 @@ async function process_get(req, res) {
                 res.end(JSON.stringify({ result: 'ok' }));
             }
             break;
+        case '/rest/onoff_set':
+            {
+                res.writeHead(200, header);
+                console.log(_urlObj.query.param)
+                let _obj = JSON.parse(_urlObj.query.param)
+
+                _obj.forEach(item=> {
+                    // console.log(item)
+                    theApp.onoffnetApp.writeGpio({
+                        port: item.p,
+                        value: item.v
+                    });
+                })
+
+
+                res.end(JSON.stringify({ result: 'ok' }));
+
+            }
+            break;
 
         default:
             res.writeHead(200, header);
