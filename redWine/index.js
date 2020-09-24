@@ -1,4 +1,4 @@
-const childExec = require("child_process").exec;
+const { execSync } = require("child_process");
 const http = require('http');
 const util = require('util');
 const fs = require('fs');
@@ -10,20 +10,20 @@ const moment = require('moment');
 const onoffnet = require('./onoffnet');
 
 let theApp = {
-    name : "redWine",
+    name: "redWine",
     version: {
         major: 1,
         miner: 0,
-        rev: 3
+        rev: 4
     },
     port: 20310,
-    udp_port : 20311
+    udp_port: 20311
 };
 
 // console.log(process.argv.length)
 // console.log(process.argv)
 
-if(process.argv.length >=3 ) {
+if (process.argv.length >= 3) {
     theApp.port = parseInt(process.argv[2])
 }
 
@@ -59,14 +59,6 @@ async function process_get(req, res) {
 
     let _urlObj = UrlParser.parse(req.url, true);
 
-    //     res.writeHead(200, {
-    //         'Content-Type': 'text/plain',
-    // //      'Content-Type': 'application/json',
-    //         'Access-Control-Allow-Origin': '*',
-    //         'Access-Control-Allow-Methods': 'POST',
-    //         'Access-Control-Max-Age': '1000'
-    //     });
-
     let header = {
         'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Methods': 'GET',
@@ -93,9 +85,9 @@ async function process_get(req, res) {
                 // let _url = urlParser.parse(req.url,true);
 
                 let result = {
-                    app : {
-                        name : theApp.name,
-                        version : theApp.version
+                    app: {
+                        name: theApp.name,
+                        version: theApp.version
                     },
                     node: process.versions,
                     os: {
@@ -110,27 +102,42 @@ async function process_get(req, res) {
             }
             break;
 
-            //to do 
-            //https://stackoverflow.com/questions/18894433/nodejs-child-process-working-directory
-            //실행디랙토리도 지정하게 해야함 
+        //to do 
+        //https://stackoverflow.com/questions/18894433/nodejs-child-process-working-directory
+        //실행디랙토리도 지정하게 해야함 
         case '/rest/exec':
             {
+
                 res.writeHead(200, header);
 
                 let _url = _urlObj;
 
+                // console.log(_url.query)
                 // console.log('try cmd : ',_url.query.cmd)
-                console.log(`cmd : ${_url.query.cmd} , at : ${new Date()}`)
-                
-                childExec(_url.query.cmd, (err, stdout, stderr) => {
+                console.log(`cmd : ${_url.query.cmd} ,cwd: ${_url.query.cwd}, at : ${new Date()}`)
 
-                    let result = {
-                        err: err,
-                        stdout: stdout,
-                        stderr: stderr
-                    }
-                    res.end(JSON.stringify(result));
-                })
+                let _opt = {}
+                if (_url.query.cwd) {
+                    _opt.cwd = _url.query.cwd
+                }
+
+                // console.log(_opt)
+
+                let _stdout = execSync(_url.query.cmd, _opt)
+                res.end(JSON.stringify({
+                    stdout: "" + _stdout
+                }));
+
+
+                // (err, stdout, stderr) => {
+
+                //     let result = {
+                //         err: err,
+                //         stdout: stdout,
+                //         stderr: stderr
+                //     }
+                //     res.end(JSON.stringify(result));
+                // })
             }
             break;
         case '/rest/setDate':
@@ -148,17 +155,17 @@ async function process_get(req, res) {
                 let _date = _url.query.d;
                 let _time = _url.query.t;
                 // _date = spliceSplit(_date,4,1,'-')
-                console.log(_date,_time)
+                console.log(_date, _time)
                 // console.log(_time.length)
                 // if(_time.length < 6) {
                 //     _time = "0" + _time
                 // }
 
-                let _tms = moment(_date + ':' + _time,"YYYYMMDD:hmmss")
+                let _tms = moment(_date + ':' + _time, "YYYYMMDD:hmmss")
                 console.log(_tms)
 
                 let _cmd = `sudo date -s '${_tms.format("YYYY-MM-DD HH:mm:ss")}'`;
-                console.log('set Date : ',_cmd)
+                console.log('set Date : ', _cmd)
                 //date -s '2019-01-25 12:34:56'
                 if (os.platform() === 'linux') {
 
@@ -232,7 +239,7 @@ async function process_get(req, res) {
                 console.log(_urlObj.query.param)
                 let _obj = JSON.parse(_urlObj.query.param)
 
-                _obj.forEach(item=> {
+                _obj.forEach(item => {
                     // console.log(item)
                     theApp.onoffnetApp.writeGpio({
                         port: item.p,

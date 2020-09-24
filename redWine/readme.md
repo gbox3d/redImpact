@@ -23,12 +23,12 @@ http://localhost:3010/rest/sysinfo
 
 프로세스 실행하기 
 
-/exec?cmd=명령어
+/exec?cmd=명령어&cwd=작업디랙토리
 
 ex)
 
 ```
-http://localhost:20310/rest/exec?cmd=pwd  
+http://localhost:20310/rest/exec?cmd=pwd&cwd=../
 http://localhost:20310/rest/exec?cmd=ls -al  
 #볼륨조절
 http://localhost:2310/rest/exec?cmd=amixer cset numid=1 100% 
