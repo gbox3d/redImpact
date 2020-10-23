@@ -27,6 +27,10 @@ if (process.argv.length >= 3) {
     theApp.port = parseInt(process.argv[2])
 }
 
+if (process.argv.length >= 4) {
+    theApp.udp_port = parseInt(process.argv[3])
+}
+
 theApp.http_server = http.createServer(
     function (req, res) {
         switch (req.method) {
