@@ -14,7 +14,7 @@ let theApp = {
     version: {
         major: 1,
         miner: 0,
-        rev: 4
+        rev: 5
     },
     port: 20310,
     udp_port: 20311
@@ -173,16 +173,21 @@ async function process_get(req, res) {
                 //date -s '2019-01-25 12:34:56'
                 if (os.platform() === 'linux') {
 
-                    childExec(_cmd, (err, stdout, stderr) => {
+                    let _stdout = execSync(_cmd,{})
+                    res.end(JSON.stringify({
+                        stdout: "" + _stdout
+                    }));
 
-                        let result = {
-                            err: err,
-                            stdout: stdout,
-                            stderr: stderr
-                        }
-                        res.end(JSON.stringify(result));
+                    // childExec(_cmd, (err, stdout, stderr) => {
 
-                    })
+                    //     let result = {
+                    //         err: err,
+                    //         stdout: stdout,
+                    //         stderr: stderr
+                    //     }
+                    //     res.end(JSON.stringify(result));
+
+                    // })
 
                 }
                 else {
