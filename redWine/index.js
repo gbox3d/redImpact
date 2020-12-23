@@ -8,6 +8,8 @@ const iwlist = require('wireless-tools/iwlist');
 const moment = require('moment');
 
 const onoffnet = require('./onoffnet');
+const { url } = require("inspector");
+const { decode } = require("querystring");
 
 let theApp = {
     name: "redWine",
@@ -115,9 +117,10 @@ async function process_get(req, res) {
 
                 let _url = _urlObj;
 
-                // console.log(_url.query)
+                console.log(_url.query)
                 // console.log('try cmd : ',_url.query.cmd)
-                console.log(`cmd : ${_url.query.cmd} ,cwd: ${_url.query.cwd}, at : ${new Date()}`)
+                let _cmd = _url.query.cmd
+                console.log(`cmd : ${_cmd} ,cwd: ${_url.query.cwd}, at : ${new Date()}`)
 
                 let _opt = {}
                 if (_url.query.cwd) {
@@ -125,12 +128,23 @@ async function process_get(req, res) {
                 }
 
                 // console.log(_opt)
+                let result = {}
+                try {
+                    _ = execSync(_cmd, _opt)
+                    console.log(_.toString())
+                    result.r = _.toString()
+                    
+                }
+                catch(e)
+                {
+                    result.err = e
+                }
 
-                let _stdout = execSync(_url.query.cmd, _opt)
-                res.end(JSON.stringify({
-                    stdout: "" + _stdout
-                }));
+                res.end(JSON.stringify(result));
 
+
+                
+                
 
                 // (err, stdout, stderr) => {
 
