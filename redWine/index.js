@@ -8,15 +8,15 @@ const iwlist = require('wireless-tools/iwlist');
 const moment = require('moment');
 
 const onoffnet = require('./onoffnet');
-const { url } = require("inspector");
-const { decode } = require("querystring");
+// const { url } = require("inspector");
+// const { decode } = require("querystring");
 
 let theApp = {
     name: "redWine",
     version: {
         major: 1,
         miner: 0,
-        rev: 5
+        rev: 6
     },
     port: 20310,
     udp_port: 20311
@@ -132,7 +132,7 @@ async function process_get(req, res) {
                 try {
                     _ = execSync(_cmd, _opt)
                     console.log(_.toString())
-                    result.r = _.toString()
+                    result.stdout = _.toString()
                     
                 }
                 catch(e)
