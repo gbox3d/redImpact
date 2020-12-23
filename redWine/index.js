@@ -106,9 +106,8 @@ async function process_get(req, res) {
             }
             break;
 
-        //to do 
         //https://stackoverflow.com/questions/18894433/nodejs-child-process-working-directory
-        //실행디랙토리도 지정하게 해야함 
+        //cwd 실행디랙토리, 
         case '/rest/exec':
             {
 
