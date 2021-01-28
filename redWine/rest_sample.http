@@ -1,5 +1,5 @@
 ###
-http://localhost:20310/rest/exec?cmd=pwd  
+GET http://localhost:20310/rest/exec?cmd=pwd  
 ### get info
 GET http://localhost:20310/rest/sysinfo
 
@@ -7,10 +7,16 @@ GET http://localhost:20310/rest/sysinfo
 GET http://localhost:20310/rest/exec?cmd=pwd  
 
 ### gpu 온도 
-http://localhost:20310/rest/exec?cmd=/opt/vc/bin/vcgencmd%20measure_temp  
+GET http://localhost:20310/rest/exec?cmd=/opt/vc/bin/vcgencmd%20measure_temp  
 
 ### cpu 온도 
-http://localhost:20310/rest/exec?cmd=cat%20/sys/class/thermal/thermal_zone0/temp
+GET http://localhost:20310/rest/exec?cmd=cat%20/sys/class/thermal/thermal_zone0/temp
 
 ### 파일 리스팅
-http://localhost:20310/rest/exec?cmd=ls&cwd=../../
+GET http://localhost:20310/rest/exec?cmd=ls&cwd=../../
+
+### gpio on
+GET http://localhost:20310/rest/onoff?pin=20&value=1
+
+### gpio off
+GET http://localhost:20310/rest/onoff?pin=20&value=0
