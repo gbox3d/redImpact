@@ -16,7 +16,7 @@ let theApp = {
     version: {
         major: 1,
         miner: 0,
-        rev: 6
+        rev: 7
     },
     port: 20310,
     udp_port: 20311

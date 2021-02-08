@@ -10,11 +10,40 @@ create by gbox3d 2019.2.22
 const childExec = require('child_process').exec;
 const dgram = require( "dgram" );
 const udp_socket = dgram.createSocket( "udp4" );
+const { execSync } = require("child_process");
 
 const os = require('os')
-
 let onoff;
-if( os.cpus().length === 8 ) {
+
+function _checkRasbian() {
+  try {
+    let _osInfo = execSync(' cat /etc/os-release')
+    // console.log(_osInfo)
+    let _lines = _osInfo.toString().split('\n')
+  
+    // console.log(_lines.split('='))
+    for(let i=0;i<_lines.length;i++)
+    {
+      let _line = _lines[i].split('=')
+      // console.log(_line)
+      if(_line[0] == 'ID' && _line[1] == 'raspbian')
+      {
+        return true
+      }
+    }
+    return false
+    
+  } catch (error) {
+  
+    console.log(error)
+    return false
+    
+  }
+
+}
+
+
+if( _checkRasbian() == false ) {
 
   //라즈베리가 아니라면 더미로 대치
   onoff = {
@@ -32,6 +61,7 @@ if( os.cpus().length === 8 ) {
   }
 }
 else {
+  console.log(`this system is rasbian os!`)
   onoff = require('onoff')
 }
 
