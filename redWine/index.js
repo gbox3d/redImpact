@@ -137,7 +137,7 @@ async function process_get(req, res) {
                 }
                 catch(e)
                 {
-                    result.err = e
+                    result.err = e.message
                 }
 
                 res.end(JSON.stringify(result));
