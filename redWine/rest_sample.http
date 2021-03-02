@@ -20,3 +20,7 @@ GET http://localhost:20310/rest/onoff?pin=20&value=1
 
 ### gpio off
 GET http://localhost:20310/rest/onoff?pin=20&value=0
+
+
+### get ip
+GET http://localhost:20310/rest/exec?cmd=hostname -I&cwd=./
