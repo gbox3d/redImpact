@@ -1,4 +1,4 @@
-const { execSync } = require("child_process");
+const { execSync,exec } = require("child_process");
 const http = require('http');
 const util = require('util');
 const fs = require('fs');
@@ -8,6 +8,7 @@ const iwlist = require('wireless-tools/iwlist');
 const moment = require('moment');
 
 const onoffnet = require('./onoffnet');
+const { resolve } = require("path");
 // const { url } = require("inspector");
 // const { decode } = require("querystring");
 
@@ -130,9 +131,23 @@ async function process_get(req, res) {
                 // console.log(_opt)
                 let result = {}
                 try {
-                    _ = execSync(_cmd, _opt)
-                    console.log(_.toString())
-                    result.stdout = _.toString()
+
+                    let _ = await new Promise((resolve,reject)=> {
+                        exec(_cmd, _opt,(err,stdout,stderr)=> {
+                            resolve({
+                                err : err,
+                                stdout : stdout,
+                                stderr : stderr
+                            })
+                        })
+
+                    });
+                    console.log(_);
+                    result = _
+
+                    // _ = execSync(_cmd, _opt)
+                    // console.log(_.toString())
+                    // result.stdout = _.toString()
                     
                 }
                 catch(e)
