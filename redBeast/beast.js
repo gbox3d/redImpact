@@ -4,6 +4,9 @@
 import fetch from 'node-fetch'
 import dgram from 'dgram'
 
+// const { execSync,exec } = require("child_process");
+import { exec } from 'child_process'
+
 
 const udp_socket = dgram.createSocket("udp4");
 const header = 20200531
@@ -30,33 +33,53 @@ function setup({ beastId, remoteIp, remotePort, restPort }) {
 
                         }
                         break;
+                    case 2:
+                        {
+                            let pathname_len = data.readUInt8(0)
+                            let pathname = data.slice(1,pathname_len)
+
+                            console.log(pathname)
+
+
+                        }
+                        break;
                     case 10: //원격 프로세스 실행 feat redWine  
                         {
                             console.log(data.toString('utf-8'))
                             let _json = JSON.parse(data.toString('utf-8'))
                             console.log(_json)
-                            let _req_url = `http://localhost:20310/rest/exec?cmd=${_json.cmd}&cwd=${_json.cwd}`
-                            console.log(_req_url)
-                            let _res = await (await fetch(_req_url)).text()
-                            console.log(_res)
 
-                            // _res = await (await fetch(`http://${remoteIp}:${restPort}/beast/cry?id=${beastId}&resData=${JSON.stringify(_res)}`)).json()
-                            // console.log(_res)
+                            let _cmd = _json.cmd
+                            let _opt = {
+                                cwd : _json.cwd
+                            }
+
+                            let _res = await new Promise((resolve, reject) => {
+                                exec(_cmd, _opt, (err, stdout, stderr) => {
+                                    resolve({
+                                        err: err,
+                                        stdout: stdout,
+                                        stderr: stderr
+                                    })
+                                })
+
+                            });
+                            console.log(_res);
+                            _res = JSON.stringify(_res)
 
                             //결과 보내기 
                             let _cry_url = `http://${remoteIp}:${restPort}/rest/post/beast/cry`
-                            // console.log(_url)
                             let _ = await (await (fetch(_cry_url, {
                                 method: 'POST',
                                 body: _res,
                                 headers: {
                                     // 'detector-header-data' : JSON.stringify({ fn: 'none', th: 0.5, dtf: 1 })
                                     'Content-Type': 'text/plain',
-                                    'device-id' : beastId
+                                    'device-id': beastId
                                 } // 이 부분은 따로 설정하고싶은 header가 있다면 넣으세요
                             }))).json();
                             console.log(_)
-                            
+
                         }
                         break;
                     case 20: //url proxy
@@ -73,7 +96,7 @@ function setup({ beastId, remoteIp, remotePort, restPort }) {
                                 headers: {
                                     // 'detector-header-data' : JSON.stringify({ fn: 'none', th: 0.5, dtf: 1 })
                                     'Content-Type': 'text/plain',
-                                    'device-id' : beastId
+                                    'device-id': beastId
                                 } // 이 부분은 따로 설정하고싶은 header가 있다면 넣으세요
                             }))).json();
                             console.log(_)
@@ -137,4 +160,4 @@ function setup({ beastId, remoteIp, remotePort, restPort }) {
 }
 
 
-export {setup}
+export { setup }
