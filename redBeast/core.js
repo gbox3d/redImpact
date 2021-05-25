@@ -16,7 +16,8 @@ beastClient.setup({
     beastId: _settings.beastId,
     remoteIp: _settings.remoteIp,
     remotePort: _settings.remotePort,
-    restPort: _settings.restPort
+    restPort: _settings.restPort,
+    req_delay : _settings.req_delay
 })
 
 

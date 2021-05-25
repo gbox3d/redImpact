@@ -1,22 +1,17 @@
-// const fetch = require('node-fetch');
-// const dgram = require("dgram");
-
 import fetch from 'node-fetch'
 import dgram from 'dgram'
-
 // const { execSync,exec } = require("child_process");
 import { exec } from 'child_process'
-
 
 const udp_socket = dgram.createSocket("udp4");
 const header = 20200531
 
-function setup({ beastId, remoteIp, remotePort, restPort }) {
+function setup({ beastId, remoteIp, remotePort, restPort,req_delay }) {
 
     console.log(`start beast client remote ip : ${remoteIp} ,port ${remotePort} , rest ${restPort} , id : ${beastId}`)
 
     try {
-        udp_socket.on("message", async function (msg, rinfo) {
+        udp_socket.on("message", async (msg, rinfo)=> {
 
             let header = msg.readUInt32LE(0);
             let code = msg.readUInt8(4)
@@ -47,7 +42,7 @@ function setup({ beastId, remoteIp, remotePort, restPort }) {
                         {
                             console.log(data.toString('utf-8'))
                             let _json = JSON.parse(data.toString('utf-8'))
-                            console.log(_json)
+                            // console.log(_json)
 
                             let _cmd = _json.cmd
                             let _opt = {
@@ -146,9 +141,7 @@ function setup({ beastId, remoteIp, remotePort, restPort }) {
                 remotePort, remoteIp
             )
 
-            // console.log('send')
-
-            setTimeout(req_loop, 5000)
+            setTimeout(req_loop, req_delay)
         }
 
         console.log(`start req : ${remoteIp} : ${remotePort}`)

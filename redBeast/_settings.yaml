@@ -2,3 +2,4 @@ remotePort: 17395
 restPort: 17396
 remoteIp: "xx.xx.com"
 beastId: 6502
+req_delay : 30000
