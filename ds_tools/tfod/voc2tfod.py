@@ -102,7 +102,7 @@ try:
             pbtxt_strbuf += f'}}\n'
 
             label_dic[_lb] = _index
-        label_path = f'{dataset_path}/label_map.pbtext'
+        label_path = dataset_config_file['label_map_file']#f'{dataset_path}/label_map.pbtext'
         with open(label_path, 'w') as f:
             f.write(pbtxt_strbuf)
             print(f'created {label_path}')
