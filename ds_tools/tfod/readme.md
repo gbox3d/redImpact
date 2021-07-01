@@ -29,6 +29,14 @@ python update_config.py -d=/home/gbox3d/work/dataset/handsign/data.yaml -m=my_ss
 ```
 bash tfod_train.sh -d /home/gbox3d/work/dataset/handsign -m my_ssd_model640 -e 1500
 ```
+멀티GPU 사용 여부는 CUDA_VISIBLE_DEVICES 환경변수값으로 제어 할수있다.  
+각각의 GPU에 batch-size 를 각각 적용한다.  
+환경 변수를 세팅하지않으면 모든 GPU 를 사용한다.  
+환경변수에 0 을넣으면 첫번째 GPU만 사용 , 0,1 첫번째와 두번째 GPU만 사용  
+
+```
+CUDA_VISIBLE_DEVICES="0,1" python $TFODPATH/model_main_tf2.py ....
+```
 
 
 ## 5. export savedmodel
