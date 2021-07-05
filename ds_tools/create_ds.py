@@ -24,7 +24,7 @@ parser.add_argument("-n",
     type=str)
 parser.add_argument("-c",
     "--class-names",
-    default=dataset_name,
+    default=class_names,
     help="classes name",
     type=str)
 parser.add_argument("-f",
@@ -36,12 +36,15 @@ parser.add_argument("-b",
     "--train-batch-size",
     default=train_batch_size,
     help="train batch size",
-    type=str)
+    type=int)
+
 args = parser.parse_args()
 dataset_path = args.dataset
 dataset_name = args.name
+class_names = args.class_names
 fine_tune_model = args.ftmodel
 train_batch_size = args.train_batch_size
+
 #%% create base dir
 # print(os.path.join(dataset_path,dataset_name))
 _dataset_path = os.path.join(dataset_path,dataset_name)
@@ -70,12 +73,13 @@ _data_yaml = {
     'names': _cls_names,
     'yolov5' : {'tool_path' : '<yolo v5 tool path>' },
     'tf' : {
-        'pipeline_config' : os.path.join(_dataset_path,'workspace','models','mymodel','pipeline.config'),
+        'pipeline_config' : os.path.join(_dataset_path,'workspace','models','custom_model','pipeline.config'),
         'label_map_file' : os.path.join(_dataset_path,'workspace','label_map.pbtext'),
         'train_batch_size' : train_batch_size,
         'train_record' : os.path.join(_dataset_path,'workspace','train.record'),
         'valid_record' : os.path.join(_dataset_path,'workspace','valid.record'),
-        'fine_tune_checkpoint' : os.path.join(_dataset_path,'workspace','pre-trained-models',fine_tune_model,'checkpoint','ckpt-0'),
+        'fine_tune_checkpoint' : os.path.join(dataset_path,'pre-trained-models',fine_tune_model,'checkpoint','ckpt-0'),
+        'pipeline_config_proto' : os.path.join(dataset_path,'pre-trained-models',fine_tune_model,'pipeline.config'),
         'fine_tune_checkpoint_type' : 'detection'
     }
   
