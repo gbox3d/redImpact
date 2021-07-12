@@ -3,5 +3,10 @@ yolo형식에 맞는 트레인 세트 구성한다.
 
 사용 예
 ```
-python voc2yolo.py --dataset-path ../../../dataset/test
+python voc2yolo.py --dataset-path /home/gbox3d/work/dataset/handsign
+```
+
+## 학습
+
+```
 ```
