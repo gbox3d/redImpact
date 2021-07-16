@@ -14,6 +14,8 @@ python create_ds.py \
 #한줄
 python create_ds.py -d ~/work/dataset/ -n mecard -c="kooroogee,gargotose,shooma" -f ssd_mobilenet_v2_fpnlite_320x320_coco17_tpu-8 -b 8
 
+python create_ds.py -d ~/work/dataset/ -n handsign -c "ok,no,good,bad"
+
 ```
 
 폴더 구조  
