@@ -85,6 +85,11 @@ export_tfjs.sh /home/gbox3d/work/dataset/handsign/workspace/models/my_ssd_model
 ```
 
 ## 7. export tflite
+**라즈베리 전용**   
+tflite를 만들기 위해서는 tflite용 savemodel 파일이 필요하다.  
+export_tflite_graph_tf2.py 로 tflite용 savemodel을 만들어  tfliteexport/ 에 저장하고  
+tflite_convert cli 툴로 변환하는 과정을 export_tflite.sh에 구현했다.  
+단 여서거 얻어진 tflite 파일은 라즈베리같은 arm-linux 용이므로 안드로이드나 ios같은 모바일 디바이스에서 사용하고싶다면 다음단계에서 수행하는 작업을 통해 얻어지는 tflite를 사용해야한다.  
 
 사용법 : export_tflite.sh tfodapi경로 모델경로   
 설명 : export_tflite_graph_tf2.py 로 tflite용 그래프 파일로 만들고 tflite_conveter로 tflite파일을 만든다.  
@@ -93,3 +98,22 @@ ckpt->tflite graph -> .tflite
 ```
 bash export_tflite.sh /home/gbox3d/tfod_models/research/object_detection /home/gbox3d/work/dataset/handsign/workspace/models/my_ssd_model
 ```
+
+## 8 . export tflite for mobile device
+
+**안드로이드,ios같은 모바일 디바이스용.**  
+추가적으로 메타 데이터 파일을 포함시켜주어야한다.  
+.tflite-> .meta.tflite
+파이썬 api로 구현하였으며 7번단계에서 얻어진 tflite용 savemodel을 가지고 변환키켜서 메타데이터를 추가시켜 파일로 출력한다.  
+
+인자설명 :  
+-d 데이터셋이름   
+-m 모델이름  
+
+사용예 :  
+```
+python tflite_exporter.py -d handsign -m my_ssd_model640
+```
+
+
+참고자료 : https://github.com/tensorflow/models/blob/master/research/object_detection/g3doc/running_on_mobile_tf2.md  

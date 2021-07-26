@@ -2,7 +2,8 @@
 TFODPATH=$1
 MODELPATH=$2
 
-python $TFODPATH/export_tflite_graph_tf2.py  --pipeline_config_path=$MODELPATH/pipeline.config \
+python $TFODPATH/export_tflite_graph_tf2.py  \
+--pipeline_config_path=$MODELPATH/pipeline.config \
 --trained_checkpoint_dir=$MODELPATH \
 --output_directory=$MODELPATH/tfliteexport
 
