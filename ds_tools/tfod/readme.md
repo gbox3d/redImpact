@@ -117,3 +117,12 @@ python tflite_exporter.py -d handsign -m my_ssd_model640
 
 
 참고자료 : https://github.com/tensorflow/models/blob/master/research/object_detection/g3doc/running_on_mobile_tf2.md  
+
+## 9 텐서보드 
+
+tfod 에서는 로그경로는 트래이닝 작업 최상위폴더를 그대로 지정해준다.  
+사용예 :
+```
+tensorboard --logdir ~/work/dataset/handsign/workspace/models/my_ssd_model
+```
+
